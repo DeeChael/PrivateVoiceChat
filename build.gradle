@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'net.deechael'
+version '1.00.0'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation "net.deechael:khl:1.02.0"
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'ch.qos.logback:logback-classic:1.2.10'
+}
+
+test {
+    useJUnitPlatform()
+}
