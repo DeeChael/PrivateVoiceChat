@@ -12,11 +12,19 @@ import net.deechael.khl.command.argument.UserArgumentType;
 import net.deechael.khl.configuration.file.FileConfiguration;
 import net.deechael.khl.configuration.file.YamlConfiguration;
 import net.deechael.khl.message.TextMessage;
+import net.deechael.khl.message.cardmessage.Card;
+import net.deechael.khl.message.cardmessage.CardMessage;
+import net.deechael.khl.message.cardmessage.Theme;
+import net.deechael.khl.message.cardmessage.element.KMarkdownText;
+import net.deechael.khl.message.cardmessage.element.PlainText;
+import net.deechael.khl.message.cardmessage.module.Header;
+import net.deechael.khl.message.cardmessage.module.Section;
 import net.deechael.khl.message.kmarkdown.KMarkdownMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Objects;
 
 public class PrivateVoiceChatBot {
 
@@ -53,12 +61,11 @@ public class PrivateVoiceChatBot {
                                     CommandSender sender = context.getSource();
                                     Channel channel = sender.getChannel();
                                     User user = sender.getUser();
+                                    if (channel.getGuild().getJoinedChannel(user).size() > 0) {
+                                        channel.sendTempMessage(MessageUtils.failed(user, "你已经加入了一个语音频道"), user);
+                                    } else {
 
-                                    sender.getChannel().sendTempMessage(KMarkdownMessage.create("---\n" +
-                                            ".voice-chat help - 获取帮助\n" +
-                                            ".voice-chat create - 创建频道\n" +
-                                            ".voice-chat invite <用户> - 邀请别人加入\n" +
-                                            "---"), sender.getUser());
+                                    }
                                     return 1;
                                 }))
                                 .then(Command.create("invite").literal().then(Command.create("user").argument(UserArgumentType.user(bot)).executes(context -> {
@@ -77,7 +84,7 @@ public class PrivateVoiceChatBot {
                                     User user = sender.getUser();
                                     GuildUser guildUser = bot.getCacheManager().getGuildUsersCache().get(channel.getGuild().getId()).get(user.getId());
                                     boolean isOp = false;
-                                    if (guildUser.getGuild().getCreator().getId() == guildUser.getId()) {
+                                    if (Objects.equals(guildUser.getGuild().getCreator().getId(), guildUser.getId())) {
                                         isOp = true;
                                     } else {
                                         for (Role role : guildUser.getRoles()) {
@@ -104,7 +111,7 @@ public class PrivateVoiceChatBot {
                                     User user = sender.getUser();
                                     GuildUser guildUser = bot.getCacheManager().getGuildUsersCache().get(channel.getGuild().getId()).get(user.getId());
                                     boolean isOp = false;
-                                    if (guildUser.getGuild().getCreator().getId() == guildUser.getId()) {
+                                    if (Objects.equals(guildUser.getGuild().getCreator().getId(), guildUser.getId())) {
                                         isOp = true;
                                     } else {
                                         for (Role role : guildUser.getRoles()) {
