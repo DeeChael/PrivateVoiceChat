@@ -72,11 +72,7 @@ public class PrivateVoiceChatBot {
                                     CommandSender sender = context.getSource();
                                     Channel channel = sender.getChannel();
                                     User user = sender.getUser();
-                                    sender.getChannel().sendTempMessage(KMarkdownMessage.create("---\n" +
-                                            ".voice-chat help - 获取帮助\n" +
-                                            ".voice-chat create - 创建频道\n" +
-                                            ".voice-chat invite <用户> - 邀请别人加入\n" +
-                                            "---"), sender.getUser());
+                                    User invitee = UserArgumentType.getUser(context, "user");
                                     return 1;
                                 })))
                                 .then(Command.create("turnon").literal().requires(sender -> {
